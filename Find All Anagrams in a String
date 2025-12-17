@@ -1,0 +1,28 @@
+class Solution:
+    def findAnagrams(self, s: str, p: str):
+        if len(p) > len(s):
+            return []
+
+        res = []
+        p_count = [0] * 26
+        window = [0] * 26
+
+        # Build frequency map for p
+        for c in p:
+            p_count[ord(c) - ord('a')] += 1
+
+        left = 0
+        for right in range(len(s)):
+            # Add right character to window
+            window[ord(s[right]) - ord('a')] += 1
+
+            # Shrink window if size exceeds p
+            if right - left + 1 > len(p):
+                window[ord(s[left]) - ord('a')] -= 1
+                left += 1
+
+            # Check for anagram
+            if window == p_count:
+                res.append(left)
+
+        return res
